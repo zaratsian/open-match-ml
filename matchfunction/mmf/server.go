@@ -1,4 +1,4 @@
-// Copyright 2019 Google LLC
+// Copyright 2021 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -31,11 +31,13 @@ type MatchFunctionService struct {
 	port               int
 }
 
-// Start creates and starts the Match Function server and also connects to Open
-// Match's queryService. This connection is used at runtime to fetch tickets
+// This function creates and starts the Match Function server. 
+// It also connects to Open Match's queryService. 
+// This connection is used at runtime to fetch tickets
 // for pools specified in MatchProfile.
 func Start(queryServiceAddr string, serverPort int) {
-	// Connect to QueryService.
+	
+	log.Printf("Connecting to QueryService.")
 	conn, err := grpc.Dial(queryServiceAddr, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("Failed to connect to Open Match, got %s", err.Error())
@@ -47,9 +49,12 @@ func Start(queryServiceAddr string, serverPort int) {
 	}
 
 	// Create and host a new gRPC service on the configured port.
+	log.Printf("Registering new MatchFunction Server")
+	
 	server := grpc.NewServer()
 	pb.RegisterMatchFunctionServer(server, &mmfService)
 	ln, err := net.Listen("tcp", fmt.Sprintf(":%d", serverPort))
+
 	if err != nil {
 		log.Fatalf("TCP net listener initialization failed for port %v, got %s", serverPort, err.Error())
 	}

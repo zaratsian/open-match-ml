@@ -1,4 +1,4 @@
-// Copyright 2019 Google LLC
+// Copyright 2021 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,19 +20,23 @@ import (
 	"open-match.dev/open-match/pkg/pb"
 )
 
-// Ticket generates a Ticket with a mode search field that has one of the
-// randomly selected modes.
 func makeTicket() *pb.Ticket {
+
 	ticket := &pb.Ticket{
 		SearchFields: &pb.SearchFields{
-			// Tags can support multiple values but for simplicity, the demo function
-			// assumes only single mode selection per Ticket.
+			// https://open-match.dev/site/docs/reference/api/#searchfields
 			Tags: []string{
-				gameMode(),
+				region(),
 			},
 			StringArgs: map[string]string{
-				"attributes.role": role(),
+				"attribute.mode": gameMode(),
 			},
+			DoubleArgs: map[string]float64{
+				"score": getScore(),
+				"skill.offense": positionStrength(),
+				"skill.defense": positionStrength(),
+			},
+
 		},
 	}
 
@@ -40,11 +44,21 @@ func makeTicket() *pb.Ticket {
 }
 
 func gameMode() string {
-	modes := []string{"mode.demo", "mode.ctf", "mode.battleroyale"}
+	modes := []string{"mode.competitive", "mode.casual"}
 	return modes[rand.Intn(len(modes))]
 }
 
-func role() string {
-	roles := []string{"role.dps", "role.support", "role.tank"}
-	return roles[rand.Intn(len(roles))]
+func region() string {
+	regions := []string{"AMER", "EMEA", "APAC"}
+	return regions[rand.Intn(len(regions))]
+}
+
+func getScore() float64 {
+	score := 1200 + (rand.Intn(500) - rand.Intn(500))
+	return float64(score)
+}
+
+func positionStrength() float64 {
+	value := rand.Float64()
+	return value
 }

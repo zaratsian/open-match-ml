@@ -1,0 +1,16 @@
+# Deployment Configs
+
+GCP_PROJECT_ID=globalgame
+
+GCP_ARTIFACT_REGISTRY_NAME="${GCP_PROJECT_ID}-open-match"
+GCP_ARTIFACT_REGISTRY_REGION="us-central1"
+
+GKE_CLUSTER_NAME="open-match-cluster"
+GKE_CLUSTER_TAGS="open-match"
+GKE_MACHINE_TYPE="n1-standard-2"
+GKE_MACHINE_ZONE="us-west1-a"
+GKE_MIN_NODES=1
+GKE_MAX_NODES=10
+
+NAMESPACE_OPEN_MATCH="open-match" # WARNING: This should not be changed
+NAMESPACE_MATCHMAKER="mm-v1"

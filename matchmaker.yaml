@@ -19,39 +19,39 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: mm102-tutorial-director
-  namespace: mm102-tutorial
+  name: NAMESPACE_MATCHMAKER-director
+  namespace: NAMESPACE_MATCHMAKER
 spec:
   containers:
-  - name: mm102-tutorial-director
-    image: REGISTRY_PLACEHOLDER/mm102-tutorial-director:latest
+  - name: NAMESPACE_MATCHMAKER-director
+    image: REGISTRY_PLACEHOLDER/NAMESPACE_MATCHMAKER-director:latest
     imagePullPolicy: Always
-  hostname: mm102-tutorial-director
+  hostname: NAMESPACE_MATCHMAKER-director
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: mm102-tutorial-frontend
-  namespace: mm102-tutorial
+  name: NAMESPACE_MATCHMAKER-frontend
+  namespace: NAMESPACE_MATCHMAKER
 spec:
   containers:
-  - name: mm102-tutorial-frontend
-    image: REGISTRY_PLACEHOLDER/mm102-tutorial-frontend:latest
+  - name: NAMESPACE_MATCHMAKER-frontend
+    image: REGISTRY_PLACEHOLDER/NAMESPACE_MATCHMAKER-frontend:latest
     imagePullPolicy: Always
-  hostname: mm102-tutorial-frontend
+  hostname: NAMESPACE_MATCHMAKER-frontend
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: mm102-tutorial-matchfunction
-  namespace: mm102-tutorial
+  name: NAMESPACE_MATCHMAKER-matchfunction
+  namespace: NAMESPACE_MATCHMAKER
   labels:
-    app: mm102-tutorial
+    app: NAMESPACE_MATCHMAKER
     component: matchfunction
 spec:
   containers:
-  - name: mm102-tutorial-matchfunction
-    image: REGISTRY_PLACEHOLDER/mm102-tutorial-matchfunction:latest
+  - name: NAMESPACE_MATCHMAKER-matchfunction
+    image: REGISTRY_PLACEHOLDER/NAMESPACE_MATCHMAKER-matchfunction:latest
     imagePullPolicy: Always
     ports:
     - name: grpc
@@ -60,14 +60,14 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: mm102-tutorial-matchfunction
-  namespace: mm102-tutorial
+  name: NAMESPACE_MATCHMAKER-matchfunction
+  namespace: NAMESPACE_MATCHMAKER
   labels:
-    app: mm102-tutorial
+    app: NAMESPACE_MATCHMAKER
     component: matchfunction
 spec:
   selector:
-    app: mm102-tutorial
+    app: NAMESPACE_MATCHMAKER
     component: matchfunction
   clusterIP: None
   type: ClusterIP

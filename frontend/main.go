@@ -1,4 +1,4 @@
-// Copyright 2019 Google LLC
+// Copyright 2021 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 
 package main
 
-// The Frontend in this tutorial continously creates Tickets in batches in Open Match.
+// The Frontend in this example continously creates Tickets in batches in Open Match.
 
 import (
 	"context"
@@ -29,7 +29,7 @@ const (
 	// The endpoint for the Open Match Frontend service.
 	omFrontendEndpoint = "open-match-frontend.open-match.svc.cluster.local:50504"
 	// Number of tickets created per iteration
-	ticketsPerIter = 20
+	ticketsPerIter = 5
 )
 
 func main() {
@@ -41,8 +41,14 @@ func main() {
 
 	defer conn.Close()
 	fe := pb.NewFrontendServiceClient(conn)
-	for range time.Tick(time.Second * 2) {
-		for i := 0; i <= ticketsPerIter; i++ {
+	
+	// For demo purposes
+	// Create a new batch of ticket requests every X seconds.
+	for {
+		// Used for testing - Wait 5 seconds in-between each new "match request"
+		time.Sleep(time.Second * time.Duration(5))
+		
+		//for i := 0; i < ticketsPerIter; i++ {
 			req := &pb.CreateTicketRequest{
 				Ticket: makeTicket(),
 			}
@@ -52,14 +58,15 @@ func main() {
 				log.Fatalf("Failed to Create Ticket, got %s", err.Error())
 			}
 
-			log.Println("Ticket created successfully, id:", resp.Id)
+			log.Printf("Ticket created successfully, id: %v\n", resp.Id)
 			go deleteOnAssign(fe, resp)
-		}
+		//}
+
 	}
 }
 
-// deleteOnAssign fetches the Ticket state periodically and deletes the Ticket
-// once it has an assignment.
+// deleteOnAssign fetches the Ticket state periodically and 
+// deletes the Ticket once it has an assignment.
 func deleteOnAssign(fe pb.FrontendServiceClient, t *pb.Ticket) {
 	for {
 		got, err := fe.GetTicket(context.Background(), &pb.GetTicketRequest{TicketId: t.GetId()})
@@ -68,7 +75,7 @@ func deleteOnAssign(fe pb.FrontendServiceClient, t *pb.Ticket) {
 		}
 
 		if got.GetAssignment() != nil {
-			log.Printf("Ticket %v got assignment %v", got.GetId(), got.GetAssignment())
+			log.Printf("Ticket %v got assignment %v (ticket has been removed).\n", got.GetId(), got.GetAssignment())
 			break
 		}
 

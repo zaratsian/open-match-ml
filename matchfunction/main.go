@@ -1,4 +1,4 @@
-// Copyright 2019 Google LLC
+// Copyright 2021 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,10 +20,11 @@
 package main
 
 import (
-	"open-match.dev/open-match/tutorials/matchmaker101/matchfunction/mmf"
+	//"open-match.dev/open-match/tutorials/matchmaker102/matchfunction/mmf"
+	"github.com/zaratsian/game-serving-architecture/matchmaker/matchfunction/mmf"
 )
 
-// This tutorial implenents a basic Match Function that is hosted in the below
+// This code implements a Match Function that is hosted in the below
 // configured port. You can also configure the Open Match QueryService endpoint
 // with which the Match Function communicates to query the Tickets.
 

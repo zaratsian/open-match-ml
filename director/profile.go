@@ -1,4 +1,4 @@
-// Copyright 2019 Google LLC
+// Copyright 2021 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,34 +20,40 @@ import (
 	"open-match.dev/open-match/pkg/pb"
 )
 
-// generateProfiles generates test profiles for the matchmaker101 tutorial.
+// Generates match profiles.
 func generateProfiles() []*pb.MatchProfile {
 	var profiles []*pb.MatchProfile
-	modes := []string{"mode.demo", "mode.ctf", "mode.battleroyale"}
-	roles := []string{"role.dps", "role.support", "role.tank"}
+
+	modes := []string{"mode.competitive", "mode.casual"}
+	regions := []string{"AMER", "EMEA", "APAC"}
+	//teams := []string{"blue", "red"}
+
 	for _, mode := range modes {
-		var pools []*pb.Pool
-		for _, role := range roles {
+
+		for _, region := range regions {
+			
+			var pools []*pb.Pool
+			
 			pools = append(pools, &pb.Pool{
-				Name: fmt.Sprintf("pool_%s_%s", mode, role),
+				Name: fmt.Sprintf("pool_%s_%s", mode, region),
 				TagPresentFilters: []*pb.TagPresentFilter{
 					{
-						Tag: mode,
+						Tag: region,
 					},
 				},
 				StringEqualsFilters: []*pb.StringEqualsFilter{
 					{
-						StringArg: "attributes.role",
-						Value:     role,
+						StringArg: "attribute.mode",
+						Value:     mode,
 					},
 				},
 			})
-		}
 
-		profiles = append(profiles, &pb.MatchProfile{
-			Name:  "profile_" + mode,
-			Pools: pools,
-		})
+			profiles = append(profiles, &pb.MatchProfile{
+				Name:  "profile_" + mode,
+				Pools: pools,
+			})
+		}
 	}
 
 	return profiles

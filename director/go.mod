@@ -1,10 +1,8 @@
-module open-match.dev/open-match/tutorials/matchmaker101/director
+module github.com/zaratsian/game-serving-architecture/matchmaker/director
 
 go 1.14
 
 require (
 	google.golang.org/grpc v1.36.0
-	open-match.dev/open-match v0.0.0-dev
+	open-match.dev/open-match v1.2.0
 )
-
-replace open-match.dev/open-match v0.0.0-dev => ../../../../
