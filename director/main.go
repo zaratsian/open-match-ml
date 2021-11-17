@@ -34,7 +34,7 @@ const (
 	// The endpoint for the Open Match Backend service.
 	omBackendEndpoint = "open-match-backend.open-match.svc.cluster.local:50505"
 	// The Host and Port for the Match Function service endpoint.
-	functionHostName       = "NAMESPACE_MATCHMAKER-matchfunction.NAMESPACE_MATCHMAKER.svc.cluster.local"
+	functionHostName       = "mm-v1-matchfunction.mm-v1.svc.cluster.local"
 	functionPort     int32 = 50502
 )
 

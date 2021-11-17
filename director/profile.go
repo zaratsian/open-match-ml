@@ -26,14 +26,17 @@ func generateProfiles() []*pb.MatchProfile {
 
 	modes := []string{"mode.competitive", "mode.casual"}
 	regions := []string{"AMER", "EMEA", "APAC"}
-	//teams := []string{"blue", "red"}
 
 	for _, mode := range modes {
 
 		for _, region := range regions {
 			
+			// Add another loop for skill ranges 
+			// For non overlapping pools increments of .25 (4 different skill brackets)
+			// For overlapping pools (people on boundaries), at max .05 overlap
 			var pools []*pb.Pool
 			
+			// Offensive Pool
 			pools = append(pools, &pb.Pool{
 				Name: fmt.Sprintf("pool_%s_%s", mode, region),
 				TagPresentFilters: []*pb.TagPresentFilter{
@@ -47,10 +50,30 @@ func generateProfiles() []*pb.MatchProfile {
 						Value:     mode,
 					},
 				},
+				//DoubleRangeFilters: 
+				//Added skill based ranges (min,max)
+			})
+
+			//Defense pool
+			pools = append(pools, &pb.Pool{
+				Name: fmt.Sprintf("pool_%s_%s", mode, region),
+				TagPresentFilters: []*pb.TagPresentFilter{
+					{
+						Tag: region,
+					},
+				},
+				StringEqualsFilters: []*pb.StringEqualsFilter{
+					{
+						StringArg: "attribute.mode",
+						Value:     mode,
+					},
+				},
+				//DoubleRangeFilters: 
+				//Added skill based ranges (min,max)
 			})
 
 			profiles = append(profiles, &pb.MatchProfile{
-				Name:  "profile_" + mode,
+				Name:  "profile_" + mode + '_' + region,
 				Pools: pools,
 			})
 		}

@@ -77,6 +77,12 @@ func makeMatches(p *pb.MatchProfile, poolTickets map[string][]*pb.Ticket) ([]*pb
 		offensive_players := 0
 		defensive_players := 0
 		
+		fmt.Printf("\n[ ***** ] Pool Tickets: %v\n", poolTickets)
+
+		// Loop through pools, Sort tickets
+		// Red team is equal to the top player from offensive or defensive pool (zigzag pattern)
+		// OR write function that loops through combinations of making teams (average teams and compare)
+
 		for pool, tickets := range poolTickets {
 
 			if len(tickets) < ticketsPerPoolPerMatch {
@@ -101,6 +107,7 @@ func makeMatches(p *pb.MatchProfile, poolTickets map[string][]*pb.Ticket) ([]*pb
 				}
 				
 			}
+
 			matchTickets = append(matchTickets, tickets[0:ticketsPerPoolPerMatch]...)
 
 			// Remove Tickets from this Pool

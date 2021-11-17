@@ -23,16 +23,22 @@ import (
 
 	"google.golang.org/grpc"
 	"open-match.dev/open-match/pkg/pb"
+
+	"math/rand"
 )
 
 const (
 	// The endpoint for the Open Match Frontend service.
 	omFrontendEndpoint = "open-match-frontend.open-match.svc.cluster.local:50504"
 	// Number of tickets created per iteration
-	ticketsPerIter = 5
+	ticketsPerIter = 10
+	sleepBetweenIter = 5 // seconds	
 )
 
+//var NumTickets int64 = 0
+
 func main() {
+	
 	// Connect to Open Match Frontend.
 	conn, err := grpc.Dial(omFrontendEndpoint, grpc.WithInsecure())
 	if err != nil {
@@ -42,25 +48,38 @@ func main() {
 	defer conn.Close()
 	fe := pb.NewFrontendServiceClient(conn)
 	
-	// For demo purposes
+	// Simulate client requests (ie. new tickets).
+	// For demo purposes.
 	// Create a new batch of ticket requests every X seconds.
 	for {
 		// Used for testing - Wait 5 seconds in-between each new "match request"
-		time.Sleep(time.Second * time.Duration(5))
+		time.Sleep(time.Second * time.Duration(sleepBetweenIter))
 		
-		//for i := 0; i < ticketsPerIter; i++ {
+		start_time := time.Now().Unix()
+		log.Printf("start_time: %v", start_time)
+		for i := 0; i < ticketsPerIter; i++ {
+			time.Sleep(time.Nanosecond * time.Duration(rand.Intn(100000)))
+
 			req := &pb.CreateTicketRequest{
 				Ticket: makeTicket(),
 			}
+			//NumTickets++
 
 			resp, err := fe.CreateTicket(context.Background(), req)
 			if err != nil {
 				log.Fatalf("Failed to Create Ticket, got %s", err.Error())
 			}
 
-			log.Printf("Ticket created successfully, id: %v\n", resp.Id)
+			//log.Printf("Ticket created successfully, id: %v\n", resp.Id)
 			go deleteOnAssign(fe, resp)
-		//}
+
+		}
+		end_time := time.Now().Unix()
+		log.Printf("end_time: %v", end_time)
+		elapsed := end_time - start_time
+		//elapsed := end_time.Sub(start_time) // Unix for milliseconds
+		log.Printf("Processed %v records in %v seconds.", ticketsPerIter, elapsed)
+		//log.Printf("Number of Tickets: %v", NumTickets)
 
 	}
 }
@@ -75,7 +94,8 @@ func deleteOnAssign(fe pb.FrontendServiceClient, t *pb.Ticket) {
 		}
 
 		if got.GetAssignment() != nil {
-			log.Printf("Ticket %v got assignment %v (ticket has been removed).\n", got.GetId(), got.GetAssignment())
+			//log.Printf("Ticket %v got assignment %v (ticket has been removed).\n", got.GetId(), got.GetAssignment())
+			//NumTickets--
 			break
 		}
 
